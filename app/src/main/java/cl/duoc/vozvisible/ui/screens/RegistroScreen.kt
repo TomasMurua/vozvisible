@@ -1,6 +1,7 @@
 package cl.duoc.vozvisible.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -274,32 +275,27 @@ fun RegistroScreen(alVolver: () -> Unit) {
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
-                Spacer(Modifier.height(4.dp))
-                APOYOS.forEach { apoyo ->
-                    val marcado = apoyo in apoyosElegidos
+                Spacer(Modifier.height(10.dp))
+                // los dejo en dos columnas, se ven mejor que en lista
+                APOYOS.chunked(2).forEach { fila ->
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 52.dp)
-                            .clickable {
-                                if (marcado) apoyosElegidos.remove(apoyo)
-                                else apoyosElegidos.add(apoyo)
-                            },
-                        verticalAlignment = Alignment.CenterVertically
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Checkbox(
-                            checked = marcado,
-                            onCheckedChange = {
-                                if (marcado) apoyosElegidos.remove(apoyo)
-                                else apoyosElegidos.add(apoyo)
-                            }
-                        )
-                        Text(
-                            text = apoyo,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                        fila.forEach { apoyo ->
+                            CeldaApoyo(
+                                texto = apoyo,
+                                marcado = apoyo in apoyosElegidos,
+                                alPulsar = {
+                                    if (apoyo in apoyosElegidos) apoyosElegidos.remove(apoyo)
+                                    else apoyosElegidos.add(apoyo)
+                                },
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+                        if (fila.size == 1) Spacer(Modifier.weight(1f))
                     }
+                    Spacer(Modifier.height(12.dp))
                 }
 
                 Spacer(Modifier.height(12.dp))
@@ -334,6 +330,41 @@ fun RegistroScreen(alVolver: () -> Unit) {
         Spacer(Modifier.height(24.dp))
         TablaRegistrados()
         Spacer(Modifier.height(32.dp))
+    }
+}
+
+@Composable
+private fun CeldaApoyo(
+    texto: String,
+    marcado: Boolean,
+    alPulsar: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val borde = if (marcado) MaterialTheme.colorScheme.primary
+    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.25f)
+
+    Card(
+        onClick = alPulsar,
+        modifier = modifier.heightIn(min = 96.dp),
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(if (marcado) 2.dp else 1.dp, borde),
+        colors = CardDefaults.cardColors(
+            containerColor = if (marcado) MaterialTheme.colorScheme.primaryContainer
+            else MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    ) {
+        Row(
+            modifier = Modifier.padding(start = 4.dp, end = 12.dp, top = 8.dp, bottom = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(checked = marcado, onCheckedChange = { alPulsar() })
+            Text(
+                text = texto,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }
 

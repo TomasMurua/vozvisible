@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import cl.duoc.vozvisible.data.PreferenciasLocales
 import cl.duoc.vozvisible.data.UsuarioRepository
 import cl.duoc.vozvisible.ui.correoValido
 import cl.duoc.vozvisible.ui.theme.VozVisibleTheme
@@ -35,9 +37,13 @@ fun LoginScreen(
     alRegistrarse: () -> Unit,
     alRecuperar: () -> Unit
 ) {
-    var correo by remember { mutableStateOf("") }
+    val contexto = LocalContext.current
+    val prefs = remember { PreferenciasLocales(contexto) }
+    val guardado = remember { prefs.correoRecordado }
+
+    var correo by remember { mutableStateOf(guardado.orEmpty()) }
     var contrasena by remember { mutableStateOf("") }
-    var recordar by remember { mutableStateOf(false) }
+    var recordar by remember { mutableStateOf(guardado != null) }
     var errorCorreo by remember { mutableStateOf<String?>(null) }
     var errorContrasena by remember { mutableStateOf<String?>(null) }
     var errorAcceso by remember { mutableStateOf<String?>(null) }
@@ -52,6 +58,7 @@ fun LoginScreen(
             errorAcceso = "No encontramos una cuenta con ese correo y esa contraseña"
         } else {
             errorAcceso = null
+            prefs.correoRecordado = if (recordar) usuario.correo else null
             alIngresar(usuario.correo)
         }
     }
