@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,9 +42,9 @@ fun LoginScreen(
     val prefs = remember { PreferenciasLocales(contexto) }
     val guardado = remember { prefs.correoRecordado }
 
-    var correo by remember { mutableStateOf(guardado.orEmpty()) }
-    var contrasena by remember { mutableStateOf("") }
-    var recordar by remember { mutableStateOf(guardado != null) }
+    var correo by rememberSaveable { mutableStateOf(guardado.orEmpty()) }
+    var contrasena by rememberSaveable { mutableStateOf("") }
+    var recordar by rememberSaveable { mutableStateOf(guardado != null) }
     var errorCorreo by remember { mutableStateOf<String?>(null) }
     var errorContrasena by remember { mutableStateOf<String?>(null) }
     var errorAcceso by remember { mutableStateOf<String?>(null) }

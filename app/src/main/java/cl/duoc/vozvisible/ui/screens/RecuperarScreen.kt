@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +35,7 @@ import cl.duoc.vozvisible.ui.theme.VozVisibleTheme
 
 @Composable
 fun RecuperarScreen(alVolver: () -> Unit) {
-    var correo by remember { mutableStateOf("") }
+    var correo by rememberSaveable { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
     var aviso by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
 
