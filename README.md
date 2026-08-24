@@ -20,7 +20,7 @@ run. Anda de Android 7 (API 24) para arriba.
 
 Si no quieres registrarte, entra con `demo@vozvisible.cl` / `Demo1234`.
 
-Está hecha con Kotlin y Jetpack Compose con Material 3, y la navegación entre pantallas
-es con Navigation Compose.
+Está hecha en Kotlin usando Jetpack Compose y Material 3. La navegación entre pantallas
+la maneja Navigation Compose.
 
 Las capturas de las pantallas están en `docs/capturas`.
