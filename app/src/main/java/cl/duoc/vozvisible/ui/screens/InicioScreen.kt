@@ -44,11 +44,11 @@ private data class Prestacion(
 
 private val PRESTACIONES = listOf(
     Prestacion("Voz a texto", "Transcribe en vivo lo que dice la otra persona", Icons.Filled.Hearing),
-    Prestacion("Texto a voz", "Escribe y el telefono habla por ti", Icons.Filled.RecordVoiceOver),
-    Prestacion("Frases rapidas", "Respuestas guardadas para el dia a dia", Icons.Filled.Bolt),
-    Prestacion("Subtitulos", "Sigue videos y llamadas con texto en pantalla", Icons.Filled.Subtitles),
-    Prestacion("Alertas hapticas", "Avisos por vibracion en vez de sonido", Icons.Filled.Vibration),
-    Prestacion("Teclado ampliado", "Escritura comoda con texto grande", Icons.Filled.Keyboard)
+    Prestacion("Texto a voz", "Escribe y el teléfono habla por ti", Icons.Filled.RecordVoiceOver),
+    Prestacion("Frases rápidas", "Respuestas guardadas para el día a día", Icons.Filled.Bolt),
+    Prestacion("Subtítulos", "Sigue videos y llamadas con texto en pantalla", Icons.Filled.Subtitles),
+    Prestacion("Alertas hápticas", "Avisos por vibración en vez de sonido", Icons.Filled.Vibration),
+    Prestacion("Teclado ampliado", "Escritura cómoda con texto grande", Icons.Filled.Keyboard)
 )
 
 @Composable
@@ -110,7 +110,7 @@ fun InicioScreen(
 
                 Spacer(Modifier.height(20.dp))
                 Text(
-                    text = "Que quieres hacer?",
+                    text = "¿Qué quieres hacer?",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onBackground
                 )

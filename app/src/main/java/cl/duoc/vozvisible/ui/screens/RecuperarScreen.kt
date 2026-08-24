@@ -40,13 +40,13 @@ fun RecuperarScreen(alVolver: () -> Unit) {
 
     fun enviar() {
         if (!correoValido(correo)) {
-            error = "Escribe un correo con formato valido"
+            error = "Escribe un correo con formato válido"
             aviso = null
             return
         }
         error = null
         aviso = if (UsuarioRepository.correoRegistrado(correo)) {
-            "Enviamos las instrucciones de recuperacion a ${correo.trim()}" to false
+            "Enviamos las instrucciones de recuperación a ${correo.trim()}" to false
         } else {
             "Ese correo no figura entre las cuentas registradas" to true
         }
@@ -62,11 +62,11 @@ fun RecuperarScreen(alVolver: () -> Unit) {
             IconButton(onClick = alVolver, modifier = Modifier.heightIn(min = 48.dp)) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Volver al inicio de sesion"
+                    contentDescription = "Volver al inicio de sesión"
                 )
             }
             Text(
-                text = "Recuperar contrasena",
+                text = "Recuperar contraseña",
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -83,8 +83,8 @@ fun RecuperarScreen(alVolver: () -> Unit) {
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
                 Text(
-                    text = "Indicanos el correo con el que creaste tu cuenta y te enviaremos " +
-                        "un enlace para definir una nueva contrasena.",
+                    text = "Indícanos el correo con el que creaste tu cuenta y te enviaremos " +
+                        "un enlace para definir una nueva contraseña.",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -93,7 +93,7 @@ fun RecuperarScreen(alVolver: () -> Unit) {
                 CampoTexto(
                     valor = correo,
                     alCambiar = { correo = it; error = null; aviso = null },
-                    etiqueta = "Correo electronico",
+                    etiqueta = "Correo electrónico",
                     error = error,
                     tecladoCorreo = true
                 )
@@ -108,7 +108,7 @@ fun RecuperarScreen(alVolver: () -> Unit) {
 
                 Spacer(Modifier.height(8.dp))
                 Vinculo(
-                    texto = "Volver al inicio de sesion",
+                    texto = "Volver al inicio de sesión",
                     alPulsar = alVolver,
                     modifier = Modifier.fillMaxWidth()
                 )

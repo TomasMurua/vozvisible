@@ -122,8 +122,8 @@ fun CampoTexto(
                         Icon(
                             imageVector = if (visible) Icons.Filled.VisibilityOff
                             else Icons.Filled.Visibility,
-                            contentDescription = if (visible) "Ocultar la contrasena"
-                            else "Mostrar la contrasena"
+                            contentDescription = if (visible) "Ocultar la contraseña"
+                            else "Mostrar la contraseña"
                         )
                     }
                 }

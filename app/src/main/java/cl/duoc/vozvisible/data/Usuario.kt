@@ -15,6 +15,6 @@ data class Usuario(
 
 enum class PerfilUsuario(val etiqueta: String) {
     PERSONA_SORDA("Persona sorda o con hipoacusia"),
-    APOYO("Familiar, cuidador o interprete"),
-    PROFESIONAL("Profesional de salud o educacion")
+    APOYO("Familiar, cuidador o intérprete"),
+    PROFESIONAL("Profesional de salud o educación")
 }

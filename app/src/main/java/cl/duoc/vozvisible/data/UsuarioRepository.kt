@@ -21,12 +21,12 @@ object UsuarioRepository {
 
     init {
         usuarios[0] = Usuario(
-            nombre = "Cuenta de demostracion",
+            nombre = "Cuenta de demostración",
             correo = "demo@vozvisible.cl",
             contrasena = "Demo1234",
-            region = "Region Metropolitana",
+            region = "Región Metropolitana",
             perfil = PerfilUsuario.PERSONA_SORDA,
-            preferencias = listOf("Subtitulos automaticos", "Alerta por vibracion")
+            preferencias = listOf("Subtítulos automáticos", "Alerta por vibración")
         )
     }
 

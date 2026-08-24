@@ -43,13 +43,13 @@ fun LoginScreen(
     var errorAcceso by remember { mutableStateOf<String?>(null) }
 
     fun intentarIngreso() {
-        errorCorreo = if (!correoValido(correo)) "Escribe un correo con formato valido" else null
-        errorContrasena = if (contrasena.isBlank()) "Ingresa tu contrasena" else null
+        errorCorreo = if (!correoValido(correo)) "Escribe un correo con formato válido" else null
+        errorContrasena = if (contrasena.isBlank()) "Ingresa tu contraseña" else null
         if (errorCorreo != null || errorContrasena != null) return
 
         val usuario = UsuarioRepository.autenticar(correo, contrasena)
         if (usuario == null) {
-            errorAcceso = "No encontramos una cuenta con ese correo y esa contrasena"
+            errorAcceso = "No encontramos una cuenta con ese correo y esa contraseña"
         } else {
             errorAcceso = null
             alIngresar(usuario.correo)
@@ -81,7 +81,7 @@ fun LoginScreen(
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
                 Text(
-                    text = "Iniciar sesion",
+                    text = "Iniciar sesión",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -90,7 +90,7 @@ fun LoginScreen(
                 CampoTexto(
                     valor = correo,
                     alCambiar = { correo = it; errorCorreo = null; errorAcceso = null },
-                    etiqueta = "Correo electronico",
+                    etiqueta = "Correo electrónico",
                     error = errorCorreo,
                     tecladoCorreo = true
                 )
@@ -99,7 +99,7 @@ fun LoginScreen(
                 CampoTexto(
                     valor = contrasena,
                     alCambiar = { contrasena = it; errorContrasena = null; errorAcceso = null },
-                    etiqueta = "Contrasena",
+                    etiqueta = "Contraseña",
                     error = errorContrasena,
                     esContrasena = true
                 )
@@ -118,7 +118,7 @@ fun LoginScreen(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                    Vinculo(texto = "Olvide mi clave", alPulsar = alRecuperar)
+                    Vinculo(texto = "Olvidé mi clave", alPulsar = alRecuperar)
                 }
 
                 if (errorAcceso != null) {
@@ -139,7 +139,7 @@ fun LoginScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = "Aun no tienes cuenta?",
+                        text = "¿Aún no tienes cuenta?",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )

@@ -50,17 +50,17 @@ import cl.duoc.vozvisible.ui.correoValido
 import cl.duoc.vozvisible.ui.theme.VozVisibleTheme
 
 private val REGIONES = listOf(
-    "Region Metropolitana",
-    "Valparaiso",
-    "Biobio",
-    "La Araucania",
+    "Región Metropolitana",
+    "Valparaíso",
+    "Biobío",
+    "La Araucanía",
     "Antofagasta",
     "Los Lagos"
 )
 
 private val APOYOS = listOf(
-    "Subtitulos automaticos",
-    "Alerta por vibracion",
+    "Subtítulos automáticos",
+    "Alerta por vibración",
     "Alto contraste",
     "Texto ampliado"
 )
@@ -84,11 +84,11 @@ fun RegistroScreen(alVolver: () -> Unit) {
     fun registrar() {
         val detectados = buildMap {
             if (nombre.isBlank()) put("nombre", "Escribe tu nombre")
-            if (!correoValido(correo)) put("correo", "Escribe un correo con formato valido")
+            if (!correoValido(correo)) put("correo", "Escribe un correo con formato válido")
             if (!contrasenaValida(contrasena)) {
-                put("contrasena", "Usa al menos 8 caracteres, con letras y numeros")
+                put("contraseña", "Usa al menos 8 caracteres, con letras y números")
             }
-            if (confirmacion != contrasena) put("confirmacion", "Las contrasenas no coinciden")
+            if (confirmacion != contrasena) put("confirmacion", "Las contraseñas no coinciden")
         }
         errores = detectados
         if (detectados.isNotEmpty()) return
@@ -117,7 +117,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
                 "Ese correo ya tiene una cuenta activa" to true
 
             ResultadoRegistro.SinCupos ->
-                "El registro admite solo ${UsuarioRepository.CAPACIDAD} cuentas y ya estan ocupadas" to true
+                "El registro admite solo ${UsuarioRepository.CAPACIDAD} cuentas y ya están ocupadas" to true
         }
 
         if (resultado is ResultadoRegistro.Exitoso) {
@@ -137,7 +137,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
             IconButton(onClick = alVolver, modifier = Modifier.heightIn(min = 48.dp)) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Volver al inicio de sesion"
+                    contentDescription = "Volver al inicio de sesión"
                 )
             }
             Text(
@@ -175,7 +175,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
                 CampoTexto(
                     valor = correo,
                     alCambiar = { correo = it },
-                    etiqueta = "Correo electronico",
+                    etiqueta = "Correo electrónico",
                     error = errores["correo"],
                     tecladoCorreo = true
                 )
@@ -184,9 +184,9 @@ fun RegistroScreen(alVolver: () -> Unit) {
                 CampoTexto(
                     valor = contrasena,
                     alCambiar = { contrasena = it },
-                    etiqueta = "Contrasena",
-                    apoyo = "Minimo 8 caracteres, con letras y numeros",
-                    error = errores["contrasena"],
+                    etiqueta = "Contraseña",
+                    apoyo = "Mínimo 8 caracteres, con letras y números",
+                    error = errores["contraseña"],
                     esContrasena = true
                 )
                 Spacer(Modifier.height(16.dp))
@@ -194,14 +194,14 @@ fun RegistroScreen(alVolver: () -> Unit) {
                 CampoTexto(
                     valor = confirmacion,
                     alCambiar = { confirmacion = it },
-                    etiqueta = "Repetir contrasena",
+                    etiqueta = "Repetir contraseña",
                     error = errores["confirmacion"],
                     esContrasena = true
                 )
                 Spacer(Modifier.height(20.dp))
 
                 Text(
-                    text = "Region",
+                    text = "Región",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -214,7 +214,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
                         value = region,
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Selecciona tu region") },
+                        label = { Text("Selecciona tu región") },
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = desplegado)
                         },
@@ -240,7 +240,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
                 Spacer(Modifier.height(24.dp))
 
                 Text(
-                    text = "Como usaras VozVisible?",
+                    text = "¿Cómo usarás VozVisible?",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
