@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -91,9 +92,9 @@ fun InicioScreen(
                             contentDescription = null,
                             modifier = Modifier.size(20.dp)
                         )
-                        Spacer(Modifier.height(0.dp))
+                        Spacer(Modifier.width(6.dp))
                         Text(
-                            text = " Salir",
+                            text = "Salir",
                             style = MaterialTheme.typography.labelLarge
                         )
                     }

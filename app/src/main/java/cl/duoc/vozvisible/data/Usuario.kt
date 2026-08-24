@@ -2,7 +2,7 @@ package cl.duoc.vozvisible.data
 
 /**
  * Perfil de acceso de la aplicacion. [preferencias] guarda los apoyos de accesibilidad
- * que la persona activo durante el registro.
+ * que la persona activó durante el registro.
  */
 data class Usuario(
     val nombre: String,

@@ -7,7 +7,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 /**
- * Escala tipografica ampliada respecto a la de Material 3 por defecto: los tamanos base
+ * Escala tipográfica ampliada respecto a la de Material 3 por defecto: los tamaños base
  * suben para que el contenido siga siendo legible sin depender del zoom del sistema.
  */
 val Tipografia = Typography(

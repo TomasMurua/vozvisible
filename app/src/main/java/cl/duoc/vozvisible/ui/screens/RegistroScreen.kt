@@ -339,7 +339,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
 
 /**
  * Vista del arreglo de perfiles. Se muestra en la misma pantalla de registro para poder
- * comprobar que cada alta ocupa un casillero y que el limite de cinco se respeta.
+ * comprobar que cada alta ocupa un casillero y que el límite de cinco se respeta.
  */
 @Composable
 private fun TablaRegistrados() {

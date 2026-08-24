@@ -44,7 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cl.duoc.vozvisible.ui.theme.VerdeExito
 
-/** Altura minima de los controles interactivos, holgada para uso con una sola mano. */
+/** Altura mínima de los controles interactivós, holgada para uso con una sola mano. */
 private val ALTO_CONTROL = 56.dp
 
 @Composable
@@ -189,8 +189,8 @@ fun Vinculo(
 }
 
 /**
- * Aviso de resultado. Ademas del color usa un icono y un texto explicito, para no
- * apoyar el mensaje unicamente en la diferencia cromatica.
+ * Aviso de resultado. Además del color usa un icono y un texto explicito, para no
+ * apoyar el mensaje únicamente en la diferencia cromática.
  */
 @Composable
 fun MensajeEstado(
