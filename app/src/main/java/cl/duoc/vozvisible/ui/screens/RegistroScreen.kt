@@ -220,7 +220,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
                         },
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
-                            .menuAnchor(androidx.compose.material3.MenuAnchorType.PrimaryNotEditable)
+                            .menuAnchor(androidx.compose.material3.ExposedDropdownMenuAnchorType.PrimaryNotEditable)
                             .fillMaxWidth()
                             .heightIn(min = 56.dp)
                     )
