@@ -4,13 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 
-/**
- * Almacén en memoria de los perfiles registrados.
- *
- * El enunciado de la entrega fija la capacidad en cinco cuentas, por eso el respaldo es un
- * arreglo de tamaño fijo y no una lista dinamica. [version] existe para que Compose vuelva a
- * componer las pantallas cuando el arreglo cambia, ya que un Array no es observable por si mismo.
- */
+// los usuarios quedan en un arreglo fijo de 5, todavia sin base de datos.
+// el contador de version es para que Compose note los cambios, porque un Array
+// normal no avisa cuando lo modificas.
 object UsuarioRepository {
 
     const val CAPACIDAD = 5
@@ -30,7 +26,7 @@ object UsuarioRepository {
         )
     }
 
-    /** Perfiles ocupados del arreglo, en orden de registro. */
+    // solo los casilleros ocupados
     fun registrados(): List<Usuario> {
         version
         return usuarios.filterNotNull()
@@ -44,10 +40,7 @@ object UsuarioRepository {
     fun correoRegistrado(correo: String): Boolean =
         registrados().any { it.correo.equals(correo.trim(), ignoreCase = true) }
 
-    /**
-     * Coloca al usuario en el primer casillero libre del arreglo.
-     * Devuelve el resultado para que la vista de registro decida qué mensaje mostrar.
-     */
+    // busca el primer casillero libre y mete al usuario ahi
     fun registrar(usuario: Usuario): ResultadoRegistro {
         if (correoRegistrado(usuario.correo)) return ResultadoRegistro.CorreoDuplicado
         val libre = usuarios.indexOfFirst { it == null }
@@ -62,7 +55,7 @@ object UsuarioRepository {
             it.correo.equals(correo.trim(), ignoreCase = true) && it.contrasena == contrasena
         }
 
-    /** Enmascara la contraseña para poder mostrarla en pantalla sin exponerla completa. */
+    // deja visibles solo las 2 primeras letras
     fun contrasenaEnmascarada(usuario: Usuario): String =
         usuario.contrasena.take(2) + "*".repeat((usuario.contrasena.length - 2).coerceAtLeast(0))
 }

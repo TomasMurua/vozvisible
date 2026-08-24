@@ -337,10 +337,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
     }
 }
 
-/**
- * Vista del arreglo de perfiles. Se muestra en la misma pantalla de registro para poder
- * comprobar que cada alta ocupa un casillero y que el límite de cinco se respeta.
- */
+// tabla con los 5 cupos, para ir viendo como se llena
 @Composable
 private fun TablaRegistrados() {
     val registrados = UsuarioRepository.registrados()

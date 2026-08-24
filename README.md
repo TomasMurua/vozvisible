@@ -1,30 +1,26 @@
 # VozVisible
 
-Aplicacion movil de accesibilidad para personas con discapacidad sensorial auditiva.
-Proyecto de la asignatura Desarrollo de Aplicaciones Moviles (DSY2204), Duoc UC.
+App de accesibilidad para personas sordas o con hipoacusia. La idea es que puedan
+comunicarse en el día a día pasando de voz a texto y de texto a voz con el teléfono.
 
-## Alcance de esta entrega
+Proyecto de Desarrollo de Aplicaciones Móviles (DSY2204), Duoc UC.
 
-Primer avance del proyecto: la capa de acceso de la aplicacion.
+## Qué tiene hasta ahora
 
-- **Login** con validacion de correo y contrasena.
-- **Registro de usuario** con seleccion de region, perfil de uso y apoyos de accesibilidad.
-- **Recuperar contrasena** a partir del correo registrado.
-- **Inicio** con las prestaciones previstas para las siguientes entregas.
+Por ahora está hecha la parte de acceso: login, registro y recuperar contraseña, más
+una pantalla de inicio donde se ven las funciones que vienen más adelante.
 
-Los perfiles se guardan en un arreglo de cinco posiciones en memoria
-(`UsuarioRepository`); todavia no hay persistencia ni backend.
+Los usuarios quedan guardados en un arreglo de 5 en memoria (`UsuarioRepository`), así
+que se pierden al cerrar la app. Todavía no hay base de datos ni backend.
 
-## Tecnologias
+## Para correrlo
 
-- Android Studio con Kotlin
-- Jetpack Compose y Material Design 3
-- Navigation Compose para el flujo entre vistas
+Abrir la carpeta en Android Studio, esperar que termine de sincronizar Gradle y darle
+run. Anda de Android 7 (API 24) para arriba.
 
-## Como ejecutar
+Si no quieres registrarte, entra con `demo@vozvisible.cl` / `Demo1234`.
 
-1. Abrir la carpeta del proyecto en Android Studio.
-2. Esperar la sincronizacion de Gradle.
-3. Ejecutar sobre un emulador o dispositivo con Android 7.0 (API 24) o superior.
+Está hecha con Kotlin y Jetpack Compose con Material 3, y la navegación entre pantallas
+es con Navigation Compose.
 
-Cuenta de prueba: `demo@vozvisible.cl` / `Demo1234`
+Las capturas de las pantallas están en `docs/capturas`.

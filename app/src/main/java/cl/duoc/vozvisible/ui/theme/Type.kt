@@ -6,10 +6,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-/**
- * Escala tipográfica ampliada respecto a la de Material 3 por defecto: los tamaños base
- * suben para que el contenido siga siendo legible sin depender del zoom del sistema.
- */
+// tamaños un poco mas grandes que los que trae Material 3 por defecto
 val Tipografia = Typography(
     headlineLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
