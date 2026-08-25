@@ -3,7 +3,7 @@
 App de accesibilidad para personas sordas o con hipoacusia. La idea es que puedan
 comunicarse en el día a día pasando de voz a texto y de texto a voz con el teléfono.
 
-Proyecto de Desarrollo de Aplicaciones Móviles (DSY2204), Duoc UC.
+Proyecto de Desarrollo de Aplicaciones Móviles.
 
 ## Qué tiene hasta ahora
 
