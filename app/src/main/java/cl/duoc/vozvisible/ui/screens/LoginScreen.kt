@@ -29,8 +29,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import cl.duoc.vozvisible.data.PreferenciasLocales
 import cl.duoc.vozvisible.data.UsuarioRepository
-import cl.duoc.vozvisible.ui.correoValido
+import cl.duoc.vozvisible.ui.esCorreoValido
 import cl.duoc.vozvisible.ui.theme.VozVisibleTheme
+import cl.duoc.vozvisible.ui.validarCampo
 
 @Composable
 fun LoginScreen(
@@ -50,8 +51,8 @@ fun LoginScreen(
     var errorAcceso by remember { mutableStateOf<String?>(null) }
 
     fun intentarIngreso() {
-        errorCorreo = if (!correoValido(correo)) "Escribe un correo con formato válido" else null
-        errorContrasena = if (contrasena.isBlank()) "Ingresa tu contraseña" else null
+        errorCorreo = validarCampo(correo, "Escribe un correo con formato válido") { it.esCorreoValido() }
+        errorContrasena = validarCampo(contrasena, "Ingresa tu contraseña") { it.isNotBlank() }
         if (errorCorreo != null || errorContrasena != null) return
 
         val usuario = UsuarioRepository.autenticar(correo, contrasena)

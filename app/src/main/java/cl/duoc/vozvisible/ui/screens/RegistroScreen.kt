@@ -53,9 +53,12 @@ import cl.duoc.vozvisible.data.PerfilUsuario
 import cl.duoc.vozvisible.data.ResultadoRegistro
 import cl.duoc.vozvisible.data.Usuario
 import cl.duoc.vozvisible.data.UsuarioRepository
-import cl.duoc.vozvisible.ui.contrasenaValida
-import cl.duoc.vozvisible.ui.correoValido
+import cl.duoc.vozvisible.data.contrasenaEnmascarada
+import cl.duoc.vozvisible.ui.esContrasenaValida
+import cl.duoc.vozvisible.ui.esCorreoValido
+import cl.duoc.vozvisible.ui.exigirLargoMinimo
 import cl.duoc.vozvisible.ui.theme.VozVisibleTheme
+import cl.duoc.vozvisible.ui.validarCampo
 
 private val REGIONES = listOf(
     "Región Metropolitana",
@@ -101,12 +104,15 @@ fun RegistroScreen(alVolver: () -> Unit) {
     fun registrar() {
         aviso = null
         val detectados = buildMap {
-            if (nombre.isBlank()) put("nombre", "Escribe tu nombre")
-            if (!correoValido(correo)) put("correo", "Escribe un correo con formato válido")
-            if (!contrasenaValida(contrasena)) {
-                put("contraseña", "Usa al menos 8 caracteres, con letras y números")
-            }
-            if (confirmacion != contrasena) put("confirmacion", "Las contraseñas no coinciden")
+            validarCampo(nombre, "Escribe tu nombre completo", exigirLargoMinimo(2))
+                ?.let { put("nombre", it) }
+            validarCampo(correo, "Escribe un correo con formato válido") { it.esCorreoValido() }
+                ?.let { put("correo", it) }
+            validarCampo(contrasena, "Usa al menos 8 caracteres, con letras y números") {
+                it.esContrasenaValida()
+            }?.let { put("contraseña", it) }
+            validarCampo(confirmacion, "Las contraseñas no coinciden") { it == contrasena }
+                ?.let { put("confirmacion", it) }
         }
         errores = detectados
         if (detectados.isNotEmpty()) return
@@ -437,7 +443,7 @@ private fun TablaRegistrados() {
                     CeldaTexto("${indice + 1}", 0.12f)
                     CeldaTexto(usuario?.correo ?: "Cupo disponible", 0.52f, usuario == null)
                     CeldaTexto(
-                        usuario?.let { UsuarioRepository.contrasenaEnmascarada(it) } ?: "-",
+                        usuario?.contrasenaEnmascarada ?: "-",
                         0.36f,
                         usuario == null
                     )

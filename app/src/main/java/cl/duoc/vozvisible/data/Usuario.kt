@@ -15,3 +15,8 @@ enum class PerfilUsuario(val etiqueta: String) {
     APOYO("Familiar, cuidador o intérprete"),
     PROFESIONAL("Profesional de salud o educación")
 }
+
+// propiedad de extension: no es un campo de la clase, pero se usa como si lo fuera.
+// deja visibles solo las 2 primeras letras de la contraseña
+val Usuario.contrasenaEnmascarada: String
+    get() = contrasena.take(2) + "*".repeat((contrasena.length - 2).coerceAtLeast(0))

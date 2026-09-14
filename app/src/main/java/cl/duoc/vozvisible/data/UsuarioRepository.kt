@@ -54,10 +54,6 @@ object UsuarioRepository {
         registrados().firstOrNull {
             it.correo.equals(correo.trim(), ignoreCase = true) && it.contrasena == contrasena
         }
-
-    // deja visibles solo las 2 primeras letras
-    fun contrasenaEnmascarada(usuario: Usuario): String =
-        usuario.contrasena.take(2) + "*".repeat((usuario.contrasena.length - 2).coerceAtLeast(0))
 }
 
 sealed interface ResultadoRegistro {

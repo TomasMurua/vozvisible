@@ -29,9 +29,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cl.duoc.vozvisible.data.UsuarioRepository
-import cl.duoc.vozvisible.ui.correoValido
+import cl.duoc.vozvisible.data.CorreoNoRegistradoException
+import cl.duoc.vozvisible.data.ServicioRecuperacion
+import cl.duoc.vozvisible.ui.esCorreoValido
 import cl.duoc.vozvisible.ui.theme.VozVisibleTheme
+import cl.duoc.vozvisible.ui.validarCampo
 
 @Composable
 fun RecuperarScreen(alVolver: () -> Unit) {
@@ -40,16 +42,17 @@ fun RecuperarScreen(alVolver: () -> Unit) {
     var aviso by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
 
     fun enviar() {
-        if (!correoValido(correo)) {
-            error = "Escribe un correo con formato válido"
+        error = validarCampo(correo, "Escribe un correo con formato válido") { it.esCorreoValido() }
+        if (error != null) {
             aviso = null
             return
         }
-        error = null
-        aviso = if (UsuarioRepository.correoRegistrado(correo)) {
-            "Enviamos las instrucciones de recuperación a ${correo.trim()}" to false
-        } else {
-            "Ese correo no figura entre las cuentas registradas" to true
+        // el servicio de envío puede fallar si el correo no está registrado;
+        // "try" se usa aquí como expresión, su resultado queda asignado a "aviso"
+        aviso = try {
+            ServicioRecuperacion.enviarInstrucciones(correo.trim()) to false
+        } catch (excepcion: CorreoNoRegistradoException) {
+            (excepcion.message ?: "No pudimos procesar la solicitud") to true
         }
     }
 
