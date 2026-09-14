@@ -110,7 +110,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
                 ?.let { put("correo", it) }
             validarCampo(contrasena, "Usa al menos 8 caracteres, con letras y números") {
                 it.esContrasenaValida()
-            }?.let { put("contraseña", it) }
+            }?.let { put("contrasena", it) }
             validarCampo(confirmacion, "Las contraseñas no coinciden") { it == contrasena }
                 ?.let { put("confirmacion", it) }
         }
@@ -218,7 +218,7 @@ fun RegistroScreen(alVolver: () -> Unit) {
                     alCambiar = { contrasena = it; errores = errores - "contrasena"; aviso = null },
                     etiqueta = "Contraseña",
                     apoyo = "Mínimo 8 caracteres, con letras y números",
-                    error = errores["contraseña"],
+                    error = errores["contrasena"],
                     esContrasena = true
                 )
                 Spacer(Modifier.height(16.dp))
