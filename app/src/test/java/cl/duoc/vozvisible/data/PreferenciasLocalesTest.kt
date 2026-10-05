@@ -14,7 +14,8 @@ import org.robolectric.annotation.Config
 
 // Robolectric: SharedPreferences real, pero corriendo en el computador, sin emulador
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [34])
+// se repite en tres versiones de Android para ver que SharedPreferences se porta igual
+@Config(sdk = [24, 30, 34])
 class PreferenciasLocalesTest {
 
     private lateinit var prefs: PreferenciasLocales
