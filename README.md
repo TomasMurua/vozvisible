@@ -7,15 +7,15 @@ Proyecto de Desarrollo de Aplicaciones Móviles.
 
 ## Qué tiene hasta ahora
 
-- Login, registro y recuperar contraseña con **Firebase Authentication** (correo y contraseña).
-- Perfil del usuario (nombre, región, tipo de uso y apoyos) guardado en **Cloud Firestore**.
+- Login, registro y recuperar contraseña con Firebase Authentication (correo y contraseña).
+- Perfil del usuario (nombre, región, tipo de uso y apoyos) guardado en Cloud Firestore.
   Se puede consultar, modificar y eliminar la cuenta desde la pantalla de perfil.
-- **Frases rápidas**: crear, ver, editar y borrar frases propias (Firestore, en tiempo real) y
+- Frases rápidas: crear, ver, editar y borrar frases propias (Firestore, en tiempo real) y
   reproducirlas en voz alta con el motor de texto a voz del teléfono.
 - La sesión queda guardada con `SharedPreferences`, junto con el correo recordado, así que
   al abrir la app de nuevo se entra directo.
-- Pruebas: JUnit, Mockito y Robolectric (en el computador) y una prueba de interfaz con
-  Espresso / Compose UI test (en emulador).
+- Pruebas: JUnit, Mockito y Robolectric corren en el computador. La prueba de interfaz, con
+  Espresso y Compose UI test, corre en un emulador.
 
 Está hecha en Kotlin con Jetpack Compose y Material 3. La navegación la maneja
 Navigation Compose y la lógica vive en ViewModels (`SesionViewModel`, `FrasesViewModel`) que
