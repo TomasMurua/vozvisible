@@ -8,3 +8,10 @@ captures/
 .cxx
 local.properties
 .kotlin/
+
+# claves y config de firebase: no van al repositorio
+keystore.properties
+*.jks
+*.keystore
+app/google-services.json
+*.apk

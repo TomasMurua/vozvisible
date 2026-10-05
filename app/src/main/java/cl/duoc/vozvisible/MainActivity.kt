@@ -17,6 +17,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val contenedor = (application as VozVisibleApp).contenedor
         setContent {
             VozVisibleTheme {
                 Surface(
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Box(modifier = Modifier.safeDrawingPadding()) {
-                        VozVisibleNavGraph()
+                        VozVisibleNavGraph(contenedor)
                     }
                 }
             }

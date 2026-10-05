@@ -1,10 +1,10 @@
 package cl.duoc.vozvisible.data
 
-// datos que se piden en el registro
+// perfil del usuario. la contraseña ya no se guarda aquí: la maneja Firebase Authentication
 data class Usuario(
+    val uid: String = "",
     val nombre: String,
     val correo: String,
-    val contrasena: String,
     val region: String,
     val perfil: PerfilUsuario,
     val preferencias: List<String>
@@ -16,7 +16,23 @@ enum class PerfilUsuario(val etiqueta: String) {
     PROFESIONAL("Profesional de salud o educación")
 }
 
-// propiedad de extension: no es un campo de la clase, pero se usa como si lo fuera.
-// deja visibles solo las 2 primeras letras de la contraseña
-val Usuario.contrasenaEnmascarada: String
-    get() = contrasena.take(2) + "*".repeat((contrasena.length - 2).coerceAtLeast(0))
+// así se guarda en Firestore (colección usuarios, documento = uid)
+fun Usuario.aMapa(): Map<String, Any> = mapOf(
+    "nombre" to nombre,
+    "correo" to correo,
+    "region" to region,
+    "perfil" to perfil.name,
+    "preferencias" to preferencias
+)
+
+// y así se lee de vuelta. si el documento viene incompleto no revienta, usa valores por defecto
+fun mapaAUsuario(uid: String, datos: Map<String, Any?>): Usuario = Usuario(
+    uid = uid,
+    nombre = datos["nombre"] as? String ?: "",
+    correo = datos["correo"] as? String ?: "",
+    region = datos["region"] as? String ?: "",
+    perfil = (datos["perfil"] as? String)
+        ?.let { nombre -> PerfilUsuario.entries.firstOrNull { it.name == nombre } }
+        ?: PerfilUsuario.PERSONA_SORDA,
+    preferencias = (datos["preferencias"] as? List<*>)?.filterIsInstance<String>().orEmpty()
+)

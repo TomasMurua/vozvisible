@@ -27,33 +27,25 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cl.duoc.vozvisible.data.CorreoNoRegistradoException
-import cl.duoc.vozvisible.data.ServicioRecuperacion
 import cl.duoc.vozvisible.ui.esCorreoValido
-import cl.duoc.vozvisible.ui.theme.VozVisibleTheme
 import cl.duoc.vozvisible.ui.validarCampo
+import cl.duoc.vozvisible.ui.viewmodel.SesionViewModel
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 
 @Composable
-fun RecuperarScreen(alVolver: () -> Unit) {
+fun RecuperarScreen(sesion: SesionViewModel, alVolver: () -> Unit) {
+    val estado by sesion.estado.collectAsState()
     var correo by rememberSaveable { mutableStateOf("") }
     var error by remember { mutableStateOf<String?>(null) }
-    var aviso by remember { mutableStateOf<Pair<String, Boolean>?>(null) }
+    LaunchedEffect(Unit) { sesion.limpiarMensaje() }
 
     fun enviar() {
         error = validarCampo(correo, "Escribe un correo con formato válido") { it.esCorreoValido() }
-        if (error != null) {
-            aviso = null
-            return
-        }
-        // el servicio de envío puede fallar si el correo no está registrado;
-        // "try" se usa aquí como expresión, su resultado queda asignado a "aviso"
-        aviso = try {
-            ServicioRecuperacion.enviarInstrucciones(correo.trim()) to false
-        } catch (excepcion: CorreoNoRegistradoException) {
-            (excepcion.message ?: "No pudimos procesar la solicitud") to true
-        }
+        if (error != null) return
+        // Firebase envía el correo; los errores (sin red, etc.) vuelven como AuthException
+        sesion.recuperar(correo)
     }
 
     Column(
@@ -96,19 +88,23 @@ fun RecuperarScreen(alVolver: () -> Unit) {
 
                 CampoTexto(
                     valor = correo,
-                    alCambiar = { correo = it; error = null; aviso = null },
+                    alCambiar = { correo = it; error = null; sesion.limpiarMensaje() },
                     etiqueta = "Correo electrónico",
                     error = error,
                     tecladoCorreo = true
                 )
 
-                aviso?.let { (texto, esError) ->
+                estado.mensaje?.let {
                     Spacer(Modifier.height(16.dp))
-                    MensajeEstado(texto = texto, esError = esError)
+                    MensajeEstado(texto = it.texto, esError = it.esError)
                 }
 
                 Spacer(Modifier.height(20.dp))
-                BotonPrincipal(texto = "Enviar instrucciones", alPulsar = { enviar() })
+                BotonPrincipal(
+                    texto = if (estado.cargando) "Enviando…" else "Enviar instrucciones",
+                    alPulsar = { enviar() },
+                    habilitado = !estado.cargando
+                )
 
                 Spacer(Modifier.height(8.dp))
                 Vinculo(
@@ -119,10 +115,4 @@ fun RecuperarScreen(alVolver: () -> Unit) {
             }
         }
     }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun RecuperarPreview() {
-    VozVisibleTheme { RecuperarScreen(alVolver = {}) }
 }

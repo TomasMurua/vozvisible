@@ -24,45 +24,36 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.platform.LocalContext
-import cl.duoc.vozvisible.data.PreferenciasLocales
-import cl.duoc.vozvisible.data.UsuarioRepository
 import cl.duoc.vozvisible.ui.esCorreoValido
-import cl.duoc.vozvisible.ui.theme.VozVisibleTheme
 import cl.duoc.vozvisible.ui.validarCampo
+import cl.duoc.vozvisible.ui.viewmodel.SesionViewModel
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 
 @Composable
 fun LoginScreen(
-    alIngresar: (String) -> Unit,
+    sesion: SesionViewModel,
+    alIngresar: () -> Unit,
     alRegistrarse: () -> Unit,
     alRecuperar: () -> Unit
 ) {
-    val contexto = LocalContext.current
-    val prefs = remember { PreferenciasLocales(contexto) }
-    val guardado = remember { prefs.correoRecordado }
+    val estado by sesion.estado.collectAsState()
+    val guardado = remember { sesion.correoRecordado }
+    LaunchedEffect(Unit) { sesion.limpiarMensaje() }
 
     var correo by rememberSaveable { mutableStateOf(guardado.orEmpty()) }
     var contrasena by rememberSaveable { mutableStateOf("") }
     var recordar by rememberSaveable { mutableStateOf(guardado != null) }
     var errorCorreo by remember { mutableStateOf<String?>(null) }
     var errorContrasena by remember { mutableStateOf<String?>(null) }
-    var errorAcceso by remember { mutableStateOf<String?>(null) }
 
     fun intentarIngreso() {
         errorCorreo = validarCampo(correo, "Escribe un correo con formato válido") { it.esCorreoValido() }
         errorContrasena = validarCampo(contrasena, "Ingresa tu contraseña") { it.isNotBlank() }
         if (errorCorreo != null || errorContrasena != null) return
 
-        val usuario = UsuarioRepository.autenticar(correo, contrasena)
-        if (usuario == null) {
-            errorAcceso = "No encontramos una cuenta con ese correo y esa contraseña"
-        } else {
-            errorAcceso = null
-            prefs.correoRecordado = if (recordar) usuario.correo else null
-            alIngresar(usuario.correo)
-        }
+        sesion.ingresar(correo, contrasena, recordar, alIngresar)
     }
 
     Column(
@@ -98,7 +89,7 @@ fun LoginScreen(
 
                 CampoTexto(
                     valor = correo,
-                    alCambiar = { correo = it; errorCorreo = null; errorAcceso = null },
+                    alCambiar = { correo = it; errorCorreo = null; sesion.limpiarMensaje() },
                     etiqueta = "Correo electrónico",
                     error = errorCorreo,
                     tecladoCorreo = true
@@ -107,7 +98,7 @@ fun LoginScreen(
 
                 CampoTexto(
                     valor = contrasena,
-                    alCambiar = { contrasena = it; errorContrasena = null; errorAcceso = null },
+                    alCambiar = { contrasena = it; errorContrasena = null; sesion.limpiarMensaje() },
                     etiqueta = "Contraseña",
                     error = errorContrasena,
                     esContrasena = true
@@ -130,13 +121,17 @@ fun LoginScreen(
                     Vinculo(texto = "Olvidé mi clave", alPulsar = alRecuperar)
                 }
 
-                if (errorAcceso != null) {
+                estado.mensaje?.let {
                     Spacer(Modifier.height(12.dp))
-                    MensajeEstado(texto = errorAcceso!!, esError = true)
+                    MensajeEstado(texto = it.texto, esError = it.esError)
                 }
 
                 Spacer(Modifier.height(20.dp))
-                BotonPrincipal(texto = "Ingresar", alPulsar = { intentarIngreso() })
+                BotonPrincipal(
+                    texto = if (estado.cargando) "Ingresando…" else "Ingresar",
+                    alPulsar = { intentarIngreso() },
+                    habilitado = !estado.cargando
+                )
 
                 Spacer(Modifier.height(16.dp))
                 SeparadorSuave()
@@ -163,13 +158,5 @@ fun LoginScreen(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f)
         )
-    }
-}
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun LoginPreview() {
-    VozVisibleTheme {
-        LoginScreen(alIngresar = {}, alRegistrarse = {}, alRecuperar = {})
     }
 }
