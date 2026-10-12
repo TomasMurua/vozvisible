@@ -61,7 +61,7 @@ import cl.duoc.vozvisible.ui.viewmodel.ComunicacionViewModel
 
 private val ANCHO_MAXIMO = 600.dp
 
-// Escribir: el teléfono escucha a la otra persona y pone en pantalla lo que dijo
+// Escribir escucha a la otra persona y pone en pantalla lo que dijo
 @Composable
 fun EscribirScreen(
     vm: ComunicacionViewModel,
@@ -71,7 +71,7 @@ fun EscribirScreen(
     val mensaje by vm.mensaje.collectAsState()
     val snackbar = remember { SnackbarHostState() }
 
-    // lo transcrito en esta conversación, lo más nuevo primero (ArrayList para sobrevivir a la rotación)
+    // lo transcrito en esta conversación, lo más nuevo primero. es ArrayList para que no se pierda al rotar
     var transcritos by rememberSaveable { mutableStateOf(ArrayList<String>()) }
     var sinReconocedor by rememberSaveable { mutableStateOf(false) }
 
@@ -205,7 +205,7 @@ fun EscribirScreen(
     }
 }
 
-// botón redondo grande con un halo que respira, para que se note dónde tocar
+// botón redondo grande con un círculo detrás que crece y se achica, para que se note dónde tocar
 @Composable
 private fun BotonMicrofono(habilitado: Boolean, alPulsar: () -> Unit) {
     val respiro = rememberInfiniteTransition(label = "respiro")

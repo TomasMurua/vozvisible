@@ -53,7 +53,7 @@ val PASOS_TUTORIAL = listOf(
 val PREGUNTAS_AYUDA = listOf(
     PreguntaAyuda(
         "¿Qué hace Hablar?",
-        "Escribes tu mensaje (o eliges una sugerencia) y el teléfono lo dice en voz alta. " +
+        "Escribes tu mensaje o eliges una sugerencia, y el teléfono lo dice en voz alta. " +
             "Además lo muestra en letra grande para que la otra persona lo pueda leer."
     ),
     PreguntaAyuda(
@@ -83,7 +83,7 @@ val PREGUNTAS_AYUDA = listOf(
     )
 )
 
-// área de ayuda: tutorial corto y preguntas frecuentes que se abren al tocarlas
+// tutorial corto y preguntas frecuentes que se abren al tocarlas
 @Composable
 fun AyudaScreen(alVolver: () -> Unit) {
     Column(

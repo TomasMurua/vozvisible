@@ -79,8 +79,8 @@ fun rememberHablador(): Hablador {
     return hablador
 }
 
-// voz a texto con el reconocedor del sistema (el de Google en la mayoría de los teléfonos).
-// no hay que pedir el permiso del micrófono: lo pide la app que reconoce
+// voz a texto con el reconocedor del sistema, que en la mayoría de los teléfonos es el de Google.
+// no hay que pedir el permiso del micrófono porque lo pide la app que reconoce
 class Escuchador(
     contexto: Context,
     private val lanzador: ManagedActivityResultLauncher<Intent, ActivityResult>

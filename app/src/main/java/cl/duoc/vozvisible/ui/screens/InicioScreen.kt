@@ -58,7 +58,7 @@ private data class Opcion(
     val destacada: Boolean = false
 )
 
-// Hablar y Escribir van primero y destacadas: son las dos funciones principales
+// Hablar y Escribir van primero y en otro color porque son las dos funciones principales
 private val OPCIONES = listOf(
     Opcion("Hablar", "Escribe y el teléfono lo dice en voz alta por ti", Icons.Filled.RecordVoiceOver, Rutas.HABLAR, destacada = true),
     Opcion("Escribir", "El teléfono escribe en pantalla lo que te dicen", Icons.Filled.Hearing, Rutas.ESCRIBIR, destacada = true),
@@ -67,7 +67,7 @@ private val OPCIONES = listOf(
     Opcion("Ayuda", "Cómo usar la app y preguntas frecuentes", Icons.AutoMirrored.Filled.HelpOutline, Rutas.AYUDA)
 )
 
-// menú principal: saludo con el nombre y las funciones de la app
+// menú principal con el saludo y las funciones de la app
 @Composable
 fun InicioScreen(
     sesion: SesionViewModel,

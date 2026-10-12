@@ -78,7 +78,7 @@ private enum class Velocidad(val etiqueta: String, val valor: Float) {
     LENTA("Lenta", 0.75f)
 }
 
-// Hablar: la persona escribe y el teléfono lo dice en voz alta y lo muestra en grande
+// en Hablar la persona escribe y el teléfono lo dice en voz alta y lo muestra en grande
 @Composable
 fun HablarScreen(
     vm: ComunicacionViewModel,
@@ -222,7 +222,7 @@ private fun PantallaGrande(
     alNuevo: () -> Unit,
     alTerminar: () -> Unit
 ) {
-    // el parlante late mientras el teléfono está hablando
+    // el ícono del parlante crece y se achica mientras el teléfono habla
     val latido = rememberInfiniteTransition(label = "latido")
     val escala by latido.animateFloat(
         initialValue = 1f,

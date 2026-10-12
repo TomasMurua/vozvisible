@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
-// lo que comparten los view models que trabajan con Firestore: un mensaje para la vista,
+// los view models que trabajan con Firestore necesitan lo mismo. un mensaje para la vista,
 // saber si hay una operación en curso y cortar si el servidor no responde
 abstract class BaseViewModel(private val tiempoMaximoMs: Long = 10_000L) : ViewModel() {
 

@@ -9,8 +9,8 @@ enum class TipoRegistro(val etiqueta: String) {
     ESCRIBIR("Escribir")
 }
 
-// cada vez que se usa Hablar o Escribir queda una entrada en el historial:
-// lo que pidió la persona (solicitud) y lo que hizo la app (respuesta)
+// cada vez que se usa Hablar o Escribir queda una entrada en el historial.
+// solicitud es lo que pidió la persona y respuesta es lo que hizo la app
 data class Registro(
     val id: String = "",
     val tipo: TipoRegistro,

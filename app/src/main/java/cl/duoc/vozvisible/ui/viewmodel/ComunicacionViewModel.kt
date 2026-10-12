@@ -17,10 +17,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 const val RESPUESTA_EN_VOZ = "Dicho en voz alta y mostrado en pantalla"
-const val RESPUESTA_SIN_VOZ = "Mostrado en pantalla (el teléfono no tiene voz en español)"
+const val RESPUESTA_SIN_VOZ = "Solo mostrado en pantalla, el teléfono no tiene voz en español"
 const val SOLICITUD_ESCRIBIR = "Escribir lo que me dicen"
 
-// Hablar (texto a voz), Escribir (voz a texto) y el historial que dejan los dos
+// Hablar pasa texto a voz, Escribir pasa voz a texto, y los dos dejan registro en el historial
 class ComunicacionViewModel(
     private val repo: RegistroRepository,
     private val uid: String

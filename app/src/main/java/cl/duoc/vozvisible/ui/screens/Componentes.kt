@@ -231,7 +231,7 @@ fun SeparadorSuave(modifier: Modifier = Modifier) {
     )
 }
 
-// fila de arriba de las pantallas internas: volver al menú y el título
+// fila de arriba de las pantallas internas, con el botón para volver al menú y el título
 @Composable
 fun BarraSuperior(
     titulo: String,
