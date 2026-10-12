@@ -12,6 +12,7 @@ import cl.duoc.vozvisible.data.FraseRepository
 import cl.duoc.vozvisible.data.PerfilRepository
 import cl.duoc.vozvisible.data.PerfilUsuario
 import cl.duoc.vozvisible.data.Preferencias
+import cl.duoc.vozvisible.data.HistorialFalso
 import cl.duoc.vozvisible.data.Usuario
 import cl.duoc.vozvisible.ui.screens.LoginScreen
 import cl.duoc.vozvisible.ui.theme.VozVisibleTheme
@@ -76,7 +77,7 @@ class LoginUiTest {
     private var ingreso = false
 
     private fun mostrarLogin() {
-        val vm = SesionViewModel(AuthFalso(), PerfilesFalso(), FrasesFalso(), PrefsFalsas())
+        val vm = SesionViewModel(AuthFalso(), PerfilesFalso(), FrasesFalso(), HistorialFalso(), PrefsFalsas())
         regla.setContent {
             VozVisibleTheme {
                 LoginScreen(
