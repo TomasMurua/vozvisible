@@ -1,7 +1,15 @@
 package cl.duoc.vozvisible.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,15 +22,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Hearing
-import androidx.compose.material.icons.filled.Keyboard
-import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.RecordVoiceOver
-import androidx.compose.material.icons.filled.Subtitles
-import androidx.compose.material.icons.filled.Vibration
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -30,44 +39,49 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
-import cl.duoc.vozvisible.ui.viewmodel.SesionViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import cl.duoc.vozvisible.navigation.Rutas
+import cl.duoc.vozvisible.ui.viewmodel.SesionViewModel
 
-private data class Prestacion(
+private data class Opcion(
     val titulo: String,
     val detalle: String,
     val icono: ImageVector,
-    val disponible: Boolean = false
+    val ruta: String,
+    val destacada: Boolean = false
 )
 
-private val PRESTACIONES = listOf(
-    Prestacion("Voz a texto", "Transcribe en vivo lo que dice la otra persona", Icons.Filled.Hearing),
-    Prestacion("Texto a voz", "Escribe y el teléfono habla por ti", Icons.Filled.RecordVoiceOver),
-    Prestacion("Frases rápidas", "Guarda, edita y reproduce tus frases del día a día", Icons.Filled.Bolt, disponible = true),
-    Prestacion("Subtítulos", "Sigue videos y llamadas con texto en pantalla", Icons.Filled.Subtitles),
-    Prestacion("Alertas hápticas", "Avisos por vibración en vez de sonido", Icons.Filled.Vibration),
-    Prestacion("Teclado ampliado", "Escritura cómoda con texto grande", Icons.Filled.Keyboard)
+// Hablar y Escribir van primero y destacadas: son las dos funciones principales
+private val OPCIONES = listOf(
+    Opcion("Hablar", "Escribe y el teléfono lo dice en voz alta por ti", Icons.Filled.RecordVoiceOver, Rutas.HABLAR, destacada = true),
+    Opcion("Escribir", "El teléfono escribe en pantalla lo que te dicen", Icons.Filled.Hearing, Rutas.ESCRIBIR, destacada = true),
+    Opcion("Frases rápidas", "Guarda, edita y reproduce tus frases del día a día", Icons.Filled.Bolt, Rutas.FRASES),
+    Opcion("Historial", "Lo que dijiste y lo que te dijeron, guardado en tu cuenta", Icons.Filled.History, Rutas.HISTORIAL),
+    Opcion("Ayuda", "Cómo usar la app y preguntas frecuentes", Icons.AutoMirrored.Filled.HelpOutline, Rutas.AYUDA)
 )
 
+// menú principal: saludo con el nombre y las funciones de la app
 @Composable
 fun InicioScreen(
     sesion: SesionViewModel,
-    alAbrirFrases: () -> Unit,
-    alAbrirPerfil: () -> Unit,
+    alAbrir: (String) -> Unit,
     alCerrarSesion: () -> Unit
 ) {
     val usuario = sesion.estado.collectAsState().value.usuario
+    // el saludo entra deslizándose la primera vez que se muestra el menú
+    val aparecer = remember { MutableTransitionState(false).apply { targetState = true } }
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 160.dp),
         modifier = Modifier.fillMaxSize(),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(20.dp),
+        contentPadding = PaddingValues(20.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
@@ -76,11 +90,18 @@ fun InicioScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Column(modifier = Modifier.weight(1f)) {
+                    BotonCabecera("Perfil", Icons.Filled.Person) { alAbrir(Rutas.PERFIL) }
+                    BotonCabecera("Salir", Icons.AutoMirrored.Filled.Logout, alCerrarSesion)
+                }
+                AnimatedVisibility(
+                    visibleState = aparecer,
+                    enter = fadeIn(tween(500)) + slideInVertically(tween(500)) { -it / 2 }
+                ) {
+                    Column {
                         Text(
-                            text = "Hola, ${usuario?.nombre ?: "de nuevo"}",
+                            text = "Hola, ${usuario?.nombre?.ifBlank { null } ?: "de nuevo"}",
                             style = MaterialTheme.typography.headlineMedium,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -88,30 +109,6 @@ fun InicioScreen(
                             text = usuario?.correo.orEmpty(),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-                        )
-                    }
-                    TextButton(onClick = alAbrirPerfil) {
-                        Icon(
-                            imageVector = Icons.Filled.Person,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(Modifier.width(6.dp))
-                        Text(
-                            text = "Perfil",
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    }
-                    TextButton(onClick = alCerrarSesion) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.Logout,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(Modifier.width(6.dp))
-                        Text(
-                            text = "Salir",
-                            style = MaterialTheme.typography.labelLarge
                         )
                     }
                 }
@@ -135,62 +132,59 @@ fun InicioScreen(
             }
         }
 
-        items(PRESTACIONES) { prestacion ->
-            TarjetaPrestacion(
-                prestacion = prestacion,
-                alPulsar = if (prestacion.disponible) alAbrirFrases else null
-            )
+        itemsIndexed(OPCIONES) { indice, opcion ->
+            // cada tarjeta entra un poco después que la anterior
+            val visible = remember { MutableTransitionState(false).apply { targetState = true } }
+            AnimatedVisibility(
+                visibleState = visible,
+                enter = fadeIn(tween(350, delayMillis = 80 * indice)) +
+                    slideInVertically(tween(350, delayMillis = 80 * indice)) { it / 4 }
+            ) {
+                TarjetaOpcion(opcion = opcion, alPulsar = { alAbrir(opcion.ruta) })
+            }
         }
     }
 }
 
 @Composable
-private fun TarjetaPrestacion(prestacion: Prestacion, alPulsar: (() -> Unit)?) {
-    val colores = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    val elevacion = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    val contenido: @Composable () -> Unit = {
+private fun BotonCabecera(texto: String, icono: ImageVector, alPulsar: () -> Unit) {
+    TextButton(onClick = alPulsar, modifier = Modifier.heightIn(min = 48.dp)) {
+        Icon(imageVector = icono, contentDescription = null, modifier = Modifier.size(20.dp))
+        Spacer(Modifier.width(6.dp))
+        Text(text = texto, style = MaterialTheme.typography.labelLarge)
+    }
+}
+
+@Composable
+private fun TarjetaOpcion(opcion: Opcion, alPulsar: () -> Unit) {
+    val fondo = if (opcion.destacada) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+    val texto = if (opcion.destacada) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+    val circulo = if (opcion.destacada) Color.White.copy(alpha = 0.18f) else MaterialTheme.colorScheme.primaryContainer
+    val icono = if (opcion.destacada) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
+
+    Card(
+        onClick = alPulsar,
+        colors = CardDefaults.cardColors(containerColor = fondo),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        modifier = Modifier.heightIn(min = 190.dp)
+    ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Icon(
-                imageVector = prestacion.icono,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(32.dp)
-            )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(52.dp)
+                    .background(circulo, CircleShape)
+            ) {
+                Icon(imageVector = opcion.icono, contentDescription = null, tint = icono, modifier = Modifier.size(30.dp))
+            }
             Spacer(Modifier.height(12.dp))
-            Text(
-                text = prestacion.titulo,
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            Text(text = opcion.titulo, style = MaterialTheme.typography.titleMedium, color = texto)
             Spacer(Modifier.height(6.dp))
             Text(
-                text = prestacion.detalle,
+                text = opcion.detalle,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.72f)
+                color = texto.copy(alpha = 0.8f)
             )
-            if (alPulsar == null) {
-                Spacer(Modifier.height(6.dp))
-                Text(
-                    text = "Próximamente",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            }
         }
-    }
-    // las que ya funcionan se pueden tocar; las demás quedan como aviso de lo que viene
-    if (alPulsar != null) {
-        Card(
-            onClick = alPulsar,
-            colors = colores,
-            elevation = elevacion,
-            modifier = Modifier.heightIn(min = 208.dp)
-        ) { contenido() }
-    } else {
-        Card(
-            colors = colores,
-            elevation = elevacion,
-            modifier = Modifier.heightIn(min = 208.dp)
-        ) { contenido() }
     }
 }

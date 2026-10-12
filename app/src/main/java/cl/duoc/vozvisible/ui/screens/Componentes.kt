@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.GraphicEq
@@ -228,4 +229,29 @@ fun SeparadorSuave(modifier: Modifier = Modifier) {
             .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f))
             .clearAndSetSemantics { }
     )
+}
+
+// fila de arriba de las pantallas internas: volver al menú y el título
+@Composable
+fun BarraSuperior(
+    titulo: String,
+    alVolver: () -> Unit,
+    modifier: Modifier = Modifier,
+    acciones: @Composable () -> Unit = {}
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = alVolver, modifier = Modifier.heightIn(min = 48.dp)) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver al menú")
+        }
+        Text(
+            text = titulo,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.weight(1f)
+        )
+        acciones()
+    }
 }

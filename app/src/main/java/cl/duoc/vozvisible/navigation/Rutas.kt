@@ -7,4 +7,8 @@ object Rutas {
     const val INICIO = "inicio"
     const val FRASES = "frases"
     const val PERFIL = "perfil"
+    const val HABLAR = "hablar"
+    const val ESCRIBIR = "escribir"
+    const val HISTORIAL = "historial"
+    const val AYUDA = "ayuda"
 }
