@@ -30,6 +30,7 @@ class SesionViewModelTest {
     private val auth: AuthRepository = mock()
     private val perfiles: PerfilRepository = mock()
     private val frases: FraseRepository = mock()
+    private val historial: RegistroRepository = mock()
     private val prefs: Preferencias = mock()
 
     private val perfilAna = Usuario(
@@ -47,7 +48,7 @@ class SesionViewModelTest {
         Dispatchers.resetMain()
     }
 
-    private fun crear() = SesionViewModel(auth, perfiles, frases, prefs)
+    private fun crear() = SesionViewModel(auth, perfiles, frases, historial, prefs)
 
     @Test
     fun ingresar_conCredencialesCorrectas_guardaLaSesionYAvisa() = runTest {
@@ -152,9 +153,10 @@ class SesionViewModelTest {
 
         crear().eliminarCuenta("Clave123") { avisado = true }
 
-        val orden = inOrder(auth, frases, perfiles)
+        val orden = inOrder(auth, frases, historial, perfiles)
         orden.verify(auth).reautenticar("Clave123")
         orden.verify(frases).eliminarTodas("uid-ana")
+        orden.verify(historial).eliminarTodos("uid-ana")
         orden.verify(perfiles).eliminar("uid-ana")
         orden.verify(auth).eliminarCuenta()
         assertTrue(avisado)
@@ -168,6 +170,7 @@ class SesionViewModelTest {
         crear().eliminarCuenta("mala") {}
 
         verify(frases, never()).eliminarTodas(any())
+        verify(historial, never()).eliminarTodos(any())
         verify(perfiles, never()).eliminar(any())
         verify(auth, never()).eliminarCuenta()
     }

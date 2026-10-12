@@ -31,6 +31,13 @@ interface FraseRepository {
     suspend fun eliminarTodas(uid: String)
 }
 
+interface RegistroRepository {
+    fun observar(uid: String): Flow<List<Registro>>
+    suspend fun crear(uid: String, registro: Registro)
+    suspend fun eliminar(uid: String, id: String)
+    suspend fun eliminarTodos(uid: String)
+}
+
 // lo que se guarda en el dispositivo con SharedPreferences
 interface Preferencias {
     var correoRecordado: String?

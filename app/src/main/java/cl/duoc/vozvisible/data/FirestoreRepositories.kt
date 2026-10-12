@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
-// estructura: usuarios/{uid}  y  usuarios/{uid}/frases/{id}
+// estructura: usuarios/{uid}, usuarios/{uid}/frases/{id} y usuarios/{uid}/historial/{id}
 class FirestorePerfilRepository(
     private val bd: FirebaseFirestore = FirebaseFirestore.getInstance()
 ) : PerfilRepository {
@@ -65,6 +65,43 @@ class FirestoreFraseRepository(
     }
 
     override suspend fun eliminarTodas(uid: String) {
+        coleccion(uid).get().await().documents.forEach { it.reference.delete().await() }
+    }
+}
+
+class FirestoreRegistroRepository(
+    private val bd: FirebaseFirestore = FirebaseFirestore.getInstance()
+) : RegistroRepository {
+
+    private fun coleccion(uid: String) =
+        bd.collection("usuarios").document(uid).collection("historial")
+
+    override fun observar(uid: String): Flow<List<Registro>> = callbackFlow {
+        val registro = coleccion(uid)
+            .orderBy("fecha", Query.Direction.DESCENDING)
+            .limit(200)
+            .addSnapshotListener { instantanea, error ->
+                if (error != null) {
+                    close(error)
+                    return@addSnapshotListener
+                }
+                val lista = instantanea?.documents.orEmpty().mapNotNull { doc ->
+                    doc.data?.let { mapaARegistro(doc.id, it) }
+                }
+                trySend(lista)
+            }
+        awaitClose { registro.remove() }
+    }
+
+    override suspend fun crear(uid: String, registro: Registro) {
+        coleccion(uid).add(registro.aMapa()).await()
+    }
+
+    override suspend fun eliminar(uid: String, id: String) {
+        coleccion(uid).document(id).delete().await()
+    }
+
+    override suspend fun eliminarTodos(uid: String) {
         coleccion(uid).get().await().documents.forEach { it.reference.delete().await() }
     }
 }

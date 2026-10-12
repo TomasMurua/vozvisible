@@ -7,6 +7,7 @@ import cl.duoc.vozvisible.data.FraseRepository
 import cl.duoc.vozvisible.data.PerfilRepository
 import cl.duoc.vozvisible.data.PerfilUsuario
 import cl.duoc.vozvisible.data.Preferencias
+import cl.duoc.vozvisible.data.RegistroRepository
 import cl.duoc.vozvisible.data.Usuario
 import cl.duoc.vozvisible.data.comoErrorDeApp
 import kotlinx.coroutines.CancellationException
@@ -33,6 +34,7 @@ class SesionViewModel(
     private val auth: AuthRepository,
     private val perfiles: PerfilRepository,
     private val frases: FraseRepository,
+    private val historial: RegistroRepository,
     private val prefs: Preferencias
 ) : ViewModel() {
 
@@ -112,11 +114,12 @@ class SesionViewModel(
         alExito()
     }
 
-    // borra frases, perfil y por último la cuenta (las reglas de Firestore piden estar autenticado)
+    // borra frases, historial, perfil y por último la cuenta (las reglas de Firestore piden estar autenticado)
     fun eliminarCuenta(clave: String, alExito: () -> Unit) = lanzar {
         auth.reautenticar(clave)
         val uid = auth.uidActual!!
         frases.eliminarTodas(uid)
+        historial.eliminarTodos(uid)
         perfiles.eliminar(uid)
         auth.eliminarCuenta()
         prefs.limpiarSesion()
